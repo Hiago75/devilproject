@@ -7,3 +7,6 @@ def devilproject():
     pass
 
 devilproject.add_command(hello)
+
+if __name__ == '__main__':
+    devilproject()
