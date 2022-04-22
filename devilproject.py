@@ -1,8 +1,9 @@
 import click
 
-from src.HelloWorld import HelloWorld
+from src.HelloWorld import hello
 
-@click.command()
+@click.group(invoke_without_command=True)
 def devilproject():
-    HelloWorld()
-            
+    pass
+
+devilproject.add_command(hello)
