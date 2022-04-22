@@ -1,6 +1,6 @@
 import click
 
-from src.HelloWorld import hello
+from src.commands.HelloWorld import hello
 
 @click.group(invoke_without_command=True)
 def devilproject():
