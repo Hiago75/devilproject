@@ -17,3 +17,5 @@ class GitHandler:
     clone_to_dir = os.path.join(self.repo_directory, filtered_repo_name)
 
     Repo.clone_from(self.repo_url, clone_to_dir)
+
+    return clone_to_dir
