@@ -1,8 +1,10 @@
 import click
+
 from src.components.ArgumentChecker import ArgumentChecker
-from src.entities.DependenciesHandler import DependenciesHandler
 
 from src.entities.GitHandler import GitHandler
+from src.entities.DependenciesHandler import DependenciesHandler
+from src.entities.WordPressConfigHandler import WordPressConfigHandler
 
 argument_checker = ArgumentChecker()
 
@@ -17,3 +19,6 @@ def create(repo_name, repo_url, master_branch):
 
     dependencies_handler = DependenciesHandler(project_directory)
     dependencies_handler.run()
+
+    wordpress_config_handler = WordPressConfigHandler(project_directory)
+    wordpress_config_handler.run()
