@@ -13,19 +13,34 @@ class ConfigurationHandler(FileHandler):
             self.assets_folder, 'config.ini')
         self.config_parser = ConfigParser()
 
+        self.devilbox_root, self.database_files_root, self.database_user = self.promptOptions()
+
+    def promptOptions(self):
+        # Roots
+        devilbox_root = click.prompt(
+            'Diretório raiz do devilbox (caminho completo)')
+        database_files_root = click.prompt(
+            'Diretório dos arquivos de dump do MySQL')
+
+        # Credentials
+        database_user = click.prompt('Usuário do MySQL usado no Devilbox')
+
+        return devilbox_root, database_files_root, database_user
+
     def create_section(self, section_name):
         self.config_parser.add_section(section=section_name)
 
     def create_option(self, section_name, option_name, option_value):
         self.config_parser.set(section_name, option_name, option_value)
 
-    def create_printing_instructions(self, devilbox_root, database_user):
+    def create_printing_instructions(self):
         instructions = {
             'paths': {
-                'devilbox_root': devilbox_root,
+                'devilbox_root': self.devilbox_root,
+                'database_files_root': self.database_files_root,
             },
             'credentials': {
-                'database_user': database_user,
+                'database_user': self.database_user,
             },
         }
 
@@ -42,7 +57,7 @@ class ConfigurationHandler(FileHandler):
         with open(filepath, 'wt') as config_file:
             self.config_parser.write(config_file)
 
-    def run(self, devilbox_root, database_user):
+    def run(self):
         click.secho('Criando arquivo de configuração', fg="bright_blue")
         filepath = self.create_file(self.config_file_path)
         click.secho('Arquivo de configuração criado', fg="green")
@@ -50,8 +65,7 @@ class ConfigurationHandler(FileHandler):
         click.secho('Inserindo configurações no arquivo', fg="bright_blue")
         self.config_parser.read(filepath)
 
-        instructions = self.create_printing_instructions(
-            devilbox_root, database_user)
+        instructions = self.create_printing_instructions()
         self.create_fields_on_file(instructions)
 
         self.save_configuration(filepath)
