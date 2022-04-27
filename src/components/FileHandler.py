@@ -13,5 +13,8 @@ class FileHandler:
         return assets_dir
 
     def copy_asset_file(self, filename: str, project_directory: str):
+        final_dir = join(project_directory, filename + '.sample')
         shutil.copyfile(join(
-            self.assets_folder, filename), join(project_directory, filename))
+            self.assets_folder, filename), final_dir)
+
+        return final_dir

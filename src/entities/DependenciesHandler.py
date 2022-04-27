@@ -1,5 +1,6 @@
 import subprocess
 import os
+from time import sleep
 
 import click
 
@@ -29,3 +30,5 @@ class DependenciesHandler():
                         fg="bright_blue")
             self.composer_install()
             click.secho('Dependencias instaladas', fg='green')
+            sleep(2)
+            click.clear()
