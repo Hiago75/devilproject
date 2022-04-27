@@ -27,10 +27,10 @@ class ConfigurationHandler(FileHandler):
 
         return devilbox_root, database_files_root, database_user
 
-    def create_section(self, section_name):
+    def create_section(self, section_name: str):
         self.config_parser.add_section(section=section_name)
 
-    def create_option(self, section_name, option_name, option_value):
+    def create_option(self, section_name: str, option_name: str, option_value: str):
         self.config_parser.set(section_name, option_name, option_value)
 
     def create_printing_instructions(self):
@@ -56,6 +56,9 @@ class ConfigurationHandler(FileHandler):
     def save_configuration(self, filepath):
         with open(filepath, 'wt') as config_file:
             self.config_parser.write(config_file)
+
+    def read_field(self, section_name: str, option_name: str):
+        return self.config_parser.get(section_name, option_name)
 
     def run(self):
         click.secho('Criando arquivo de configuração', fg="bright_blue")
