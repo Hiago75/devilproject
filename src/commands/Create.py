@@ -1,8 +1,8 @@
 import click
 from src.components.ArgumentChecker import ArgumentChecker
-from src.components.DependenciesHandler import DependenciesHandler
+from src.entities.DependenciesHandler import DependenciesHandler
 
-from src.components.GitHandler import GitHandler
+from src.entities.GitHandler import GitHandler
 
 argument_checker = ArgumentChecker()
 
