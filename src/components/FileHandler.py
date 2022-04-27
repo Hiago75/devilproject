@@ -21,7 +21,9 @@ class FileHandler:
 
     def create_file(self, filepath):
         if exists(filepath):
-            return
+            return filepath
 
         config_file = open(filepath, 'x')
         config_file.close()
+
+        return filepath
