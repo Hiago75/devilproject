@@ -1,4 +1,3 @@
-from timeit import repeat
 import click
 
 from src.components.ArgumentChecker import ArgumentChecker
