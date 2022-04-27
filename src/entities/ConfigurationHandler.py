@@ -19,13 +19,40 @@ class ConfigurationHandler(FileHandler):
     def create_option(self, section_name, option_name, option_value):
         self.config_parser.set(section_name, option_name, option_value)
 
+    def create_printing_instructions(self, devilbox_root, database_user):
+        instructions = {
+            'paths': {
+                'devilbox_root': devilbox_root,
+            },
+            'credentials': {
+                'database_user': database_user,
+            },
+        }
+
+        return instructions
+
+    def create_fields_on_file(self, instructions):
+        for section in instructions:
+            self.create_section(str(section))
+            for option in instructions[section]:
+                self.create_option(str(section), str(
+                    option), instructions[section][option])
+
     def save_configuration(self, filepath):
         with open(filepath, 'wt') as config_file:
             self.config_parser.write(config_file)
 
-    def run(self, devilbox_root):
+    def run(self, devilbox_root, database_user):
+        click.secho('Criando arquivo de configuração', fg="bright_blue")
         filepath = self.create_file(self.config_file_path)
+        click.secho('Arquivo de configuração criado', fg="green")
+
+        click.secho('Inserindo configurações no arquivo', fg="bright_blue")
         self.config_parser.read(filepath)
-        self.create_section('paths')
-        self.create_option('paths', 'devilbox_root', devilbox_root)
+
+        instructions = self.create_printing_instructions(
+            devilbox_root, database_user)
+        self.create_fields_on_file(instructions)
+
         self.save_configuration(filepath)
+        click.secho('Configurações inseridas no arquivo', fg="green")
