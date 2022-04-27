@@ -1,5 +1,5 @@
 import shutil
-from os.path import join, abspath
+from os.path import join, abspath, exists
 
 
 class FileHandler:
@@ -18,3 +18,10 @@ class FileHandler:
             self.assets_folder, filename), final_dir)
 
         return final_dir
+
+    def create_file(self, filepath):
+        if exists(filepath):
+            return
+
+        config_file = open(filepath, 'x')
+        config_file.close()
