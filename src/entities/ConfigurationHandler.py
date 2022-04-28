@@ -2,8 +2,10 @@ import os
 import click
 
 from configparser import ConfigParser
+from src.components.ArgumentChecker import ArgumentChecker
 
 from src.components.FileHandler import FileHandler
+from src.components.PromptHandler import PromptHandler
 
 
 class ConfigurationHandler(FileHandler):
@@ -11,19 +13,23 @@ class ConfigurationHandler(FileHandler):
         FileHandler.__init__(self)
         self.config_file_path = os.path.join(
             self.assets_folder, 'config.ini')
+        self.prompt_handler = PromptHandler()
+        self.argument_checker = ArgumentChecker()
         self.config_parser = ConfigParser()
 
         self.devilbox_root, self.database_files_root, self.database_user = self.promptOptions()
 
     def promptOptions(self):
         # Roots
-        devilbox_root = click.prompt(
-            'Diretório raiz do devilbox (caminho completo)')
-        database_files_root = click.prompt(
-            'Diretório dos arquivos de dump do MySQL')
+        devilbox_root = self.prompt_handler.createTextPrompt(
+            'Diretório raiz do devilbox (caminho completo)', self.argument_checker.verify_directory)
+
+        database_files_root = self.prompt_handler.createTextPrompt(
+            'Diretório dos arquivos de dump do MySQL (caminho completo)', self.argument_checker.verify_directory)
 
         # Credentials
-        database_user = click.prompt('Usuário do MySQL usado no Devilbox')
+        database_user = self.prompt_handler.createTextPrompt(
+            'Usuário do MySQL usado no Devilbox')
 
         return devilbox_root, database_files_root, database_user
 
@@ -64,12 +70,12 @@ class ConfigurationHandler(FileHandler):
         click.secho('Criando arquivo de configuração', fg="bright_blue")
         filepath = self.create_file(self.config_file_path)
         click.secho('Arquivo de configuração criado', fg="green")
+        
+        click.secho('-' * 50)
 
         click.secho('Inserindo configurações no arquivo', fg="bright_blue")
         self.config_parser.read(filepath)
-
         instructions = self.create_printing_instructions()
         self.create_fields_on_file(instructions)
-
         self.save_configuration(filepath)
         click.secho('Configurações inseridas no arquivo', fg="green")

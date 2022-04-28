@@ -19,7 +19,8 @@ class ArgumentChecker:
         directory_exists = os.path.exists(dir)
 
         if directory_exists:
-            return dir
+            return True
 
-        raise click.BadParameter(
-            'Esse diretório não existe. Confira se o caminho está completo e escrito corretamente')
+        click.secho(
+            'Esse diretório não existe. Confira se o caminho está completo e escrito corretamente', fg="red")
+        return False
