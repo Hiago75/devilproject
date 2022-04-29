@@ -17,21 +17,21 @@ class ConfigurationHandler(FileHandler):
         self.argument_checker = ArgumentChecker()
         self.config_parser = ConfigParser()
 
-        self.devilbox_root, self.database_files_root, self.database_user = self.promptOptions()
+        self.devilbox_root = None
+        self.database_files_root = None
+        self.database_user = None
 
     def promptOptions(self):
         # Roots
-        devilbox_root = self.prompt_handler.createTextPrompt(
+        self.devilbox_root = self.prompt_handler.createTextPrompt(
             'Diretório raiz do devilbox (caminho completo)', self.argument_checker.verify_directory)
 
-        database_files_root = self.prompt_handler.createTextPrompt(
+        self.database_files_root = self.prompt_handler.createTextPrompt(
             'Diretório dos arquivos de dump do MySQL (caminho completo)', self.argument_checker.verify_directory)
 
         # Credentials
-        database_user = self.prompt_handler.createTextPrompt(
+        self.database_user = self.prompt_handler.createTextPrompt(
             'Usuário do MySQL usado no Devilbox')
-
-        return devilbox_root, database_files_root, database_user
 
     def create_section(self, section_name: str):
         self.config_parser.add_section(section=section_name)
@@ -67,10 +67,14 @@ class ConfigurationHandler(FileHandler):
         return self.config_parser.get(section_name, option_name)
 
     def run(self):
+        self.promptOptions()
+
+        click.clear()
+
         click.secho('Criando arquivo de configuração', fg="bright_blue")
         filepath = self.create_file(self.config_file_path)
         click.secho('Arquivo de configuração criado', fg="green")
-        
+
         click.secho('-' * 50)
 
         click.secho('Inserindo configurações no arquivo', fg="bright_blue")

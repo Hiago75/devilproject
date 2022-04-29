@@ -1,4 +1,3 @@
-from email.policy import default
 import click
 
 from src.entities.ConfigurationHandler import ConfigurationHandler
