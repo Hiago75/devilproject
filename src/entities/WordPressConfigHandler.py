@@ -2,6 +2,7 @@ import os
 import click
 
 from src.components.FileHandler import FileHandler
+from src.entities.ConfigurationHandler import ConfigurationHandler
 
 
 class WordPressConfigHandler:
@@ -9,7 +10,8 @@ class WordPressConfigHandler:
         self.project_directory = project_directory
         self.project_name = project_name
         self.file_handler = FileHandler()
-        self.db_name, self.db_prefix, self.domain = self.get_config_data()
+        self.configuration_handler = ConfigurationHandler()
+        self.db_name, self.db_prefix, self.domain, self.db_user, self.db_password = self.get_config_data()
 
     def create_base_file(self):
         config_file_dir = self.file_handler.copy_asset_file(
@@ -22,8 +24,12 @@ class WordPressConfigHandler:
         db_prefix = click.prompt(
             'Qual o prefixo das tabelas da base de dados?')
         domain = self.project_name + '.loc'
+        db_user = self.configuration_handler.read_field(
+            'credentials', 'database_user')
+        db_password = self.configuration_handler.read_field(
+            'credentials', 'database_password')
 
-        return db_name, db_prefix, domain
+        return db_name, db_prefix, domain, db_user, db_password
 
     def replace_statments(self, config_file_dir):
         original_config = open(config_file_dir, 'rt')
@@ -35,6 +41,8 @@ class WordPressConfigHandler:
             '<dbname>': self.db_name,
             '<prefix>': self.db_prefix,
             '<domain>': self.domain,
+            '<dbuser>': self.db_user,
+            '<dbpassword>': self.db_password,
         }
 
         for line in original_config:

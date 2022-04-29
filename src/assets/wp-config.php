@@ -6,8 +6,8 @@ define('_MULTSITE', false);
 
 //DB Conection
 define('DB_NAME', _DATABASE);
-define('DB_USER', 'root');
-define('DB_PASSWORD', '');
+define('DB_USER', '<dbuser>');
+define('DB_PASSWORD', '<dbpassword>');
 define('DB_HOST', '127.0.0.1');
 define('DB_CHARSET', 'utf8');
 define('DB_COLLATE', '');

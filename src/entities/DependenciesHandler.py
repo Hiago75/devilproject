@@ -31,3 +31,6 @@ class DependenciesHandler():
             click.secho('Dependencias instaladas', fg='green')
             sleep(2)
             click.clear()
+        else:
+            print("N ta caindo no if")
+            sleep(4)
