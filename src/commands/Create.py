@@ -4,9 +4,11 @@ from src.components.ArgumentChecker import ArgumentChecker
 
 from src.entities.GitHandler import GitHandler
 from src.entities.DependenciesHandler import DependenciesHandler
+from src.entities.SetupChecker import SetupChecker
 from src.entities.WordPressConfigHandler import WordPressConfigHandler
 
 argument_checker = ArgumentChecker()
+setup_checker = SetupChecker()
 
 
 @click.command()
@@ -14,6 +16,8 @@ argument_checker = ArgumentChecker()
 @click.option('--repo_url', prompt="URL do repositório no Git(HTTPS/SSH)", callback=argument_checker.verify_git_url, required=True)
 @click.option('--master-branch', prompt="Vai clonar a branch Master?", is_flag=True, default=True)
 def create(project_name, repo_url, master_branch):
+    setup_checker.run()
+
     git_handler = GitHandler(project_name, repo_url, master_branch)
     project_directory = git_handler.run()
 
