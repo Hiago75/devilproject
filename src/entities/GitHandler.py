@@ -1,55 +1,67 @@
 import re
 import os
 import click
+
 from git import Repo
 
 from src.components.ArgumentChecker import ArgumentChecker
+from src.components.PromptHandler import PromptHandler
 
 
 class GitHandler:
-    def __init__(self, repo_name: str, repo_url: str, master_branch: bool) -> None:
-        self.repo_url = repo_url
-        self.repo_name = repo_name
-        self.master_branch = master_branch
+    def __init__(self, prompt_handler, argument_checker) -> None:
+        self.__repo_url = None
+        self.__repo_name = None
+        self.__master_branch = None
 
-        self.argument_checker = ArgumentChecker()
+        self.__prompt_handler = prompt_handler
+        self.__argument_checker = argument_checker
 
-    def filter_repo_name(self) -> str:
-        filtered_name = re.sub('[^A-Za-z0-9]+', '', self.repo_name)
+    def __prompt_options(self):
+        self.__repo_name = self.__prompt_handler.create_text_prompt(
+            'Qual o nome do projeto?')
+        self.__repo_url = self.__prompt_handler.create_text_prompt(
+            'Qual a URL do repositório Git(HTTPS/SSH)?', self.__argument_checker.verify_git_url)
+        self.__master_branch = click.confirm(
+            'Vai clonar a branch Master?', default=True)
+
+    def __filter_repo_name(self) -> str:
+        filtered_name = re.sub('[^A-Za-z0-9]+', '', self.__repo_name)
         return filtered_name.lower()
 
-    def handle_branch(self) -> str:
+    def __handle_branch(self) -> str:
         branch = 'master'
 
-        if not self.master_branch:
+        if not self.__master_branch:
             branch = click.prompt(
                 'Qual o nome da branch que você quer clonar?')
 
         return branch
 
-    def handle_repo_directory(self) -> str:
+    def __handle_repo_directory(self) -> str:
         current_repository = os.getcwd()
         repo_directory = click.prompt(
             'Diretório da pasta aonde será inserido o projeto', default=current_repository)
 
-        self.argument_checker.verify_directory(repo_directory)
-        filtered_repo_name = self.filter_repo_name()
+        self.__argument_checker.verify_directory(repo_directory)
+        filtered_repo_name = self.__filter_repo_name()
 
         complete_directory = os.path.join(
             repo_directory, filtered_repo_name)
 
         return complete_directory
 
-    def clone_repo(self, directory, branch):
-        Repo.clone_from(self.repo_url, directory, branch=branch)
+    def __clone_repo(self, directory, branch):
+        Repo.clone_from(self.__repo_url, directory, branch=branch)
 
     def run(self):
-        branch = self.handle_branch()
-        directory = self.handle_repo_directory()
+        self.__prompt_options()
+        branch = self.__handle_branch()
+        directory = self.__handle_repo_directory()
         click.clear()
 
         click.secho('Clonando o repositório', fg="bright_blue")
-        self.clone_repo(directory, branch)
+        self.__clone_repo(directory, branch)
         click.secho('Repositório clonado', fg="green")
 
-        return directory
+        return directory, self.__repo_name
