@@ -26,3 +26,13 @@ class ArgumentChecker:
         click.secho(
             'Esse diretório não existe. Confira se o caminho está completo e escrito corretamente', fg="red")
         return False
+
+    def verify_git_directory(self, complete_dir):
+        directory_exists = os.path.exists(complete_dir)
+
+        if directory_exists:
+            click.secho(
+                'Uma pasta com o mesmo nome desse projeto já existe atualmente', fg="red")
+            return True
+
+        return False
