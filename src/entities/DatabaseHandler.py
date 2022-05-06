@@ -56,6 +56,7 @@ class DatabaseHandler:
             })
 
     def run(self):
+        click.clear()
         self.__verify_actual_path()
 
         click.secho('Criando base de dados', fg="bright_blue")
