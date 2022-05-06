@@ -1,11 +1,7 @@
 import os
 import click
 
-from configparser import ConfigParser
-from src.components.ArgumentChecker import ArgumentChecker
-
 from src.components.FileHandler import FileHandler
-from src.components.PromptHandler import PromptHandler
 
 
 class ConfigurationHandler(FileHandler):

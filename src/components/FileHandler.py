@@ -1,5 +1,8 @@
+import os
 import shutil
 from os.path import join, abspath, exists
+
+from click import BadParameter
 
 
 class FileHandler:
@@ -19,6 +22,14 @@ class FileHandler:
 
         return final_dir
 
+    def move_file(self, actual_directory, move_to):
+        file_exists = exists(actual_directory)
+
+        if not file_exists:
+            raise BadParameter('O seu arquivo não foi encontrado')
+
+        shutil.move(actual_directory, move_to)
+
     def create_file(self, filepath):
         if exists(filepath):
             return filepath
@@ -27,3 +38,23 @@ class FileHandler:
         config_file.close()
 
         return filepath
+
+    def replace_statments(self, original_file_dir, new_file_dir, statments):
+        original_file = open(original_file_dir, 'rt')
+        new_config = open(new_file_dir, 'wt')
+
+        for line in original_file:
+            statment = [
+                statment for statment in statments.keys() if str(statment) in line]
+
+            if statment:
+                new_config.write(line.replace(
+                    statment[0], statments[statment[0]]))
+                continue
+
+            new_config.write(line)
+
+        original_file.close()
+        new_config.close()
+
+        os.remove(original_file_dir)

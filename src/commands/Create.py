@@ -1,8 +1,11 @@
 from configparser import ConfigParser
+from sqlite3 import DatabaseError
 import click
 
 from src.components.ArgumentChecker import ArgumentChecker
+from src.components.FileHandler import FileHandler
 from src.components.PromptHandler import PromptHandler
+from src.entities.DatabaseHandler import DatabaseHandler
 
 from src.entities.GitHandler import GitHandler
 from src.entities.DependenciesHandler import DependenciesHandler
@@ -14,7 +17,7 @@ argument_checker = ArgumentChecker()
 setup_checker = SetupChecker()
 prompt_handler = PromptHandler()
 config_parser = ConfigParser()
-# TODO: Create a way to read the configuration file without instancing the ConfigurationHandler
+file_handler = FileHandler()
 configuration_handler = ConfigurationHandler(
     prompt_handler, argument_checker, config_parser)
 
@@ -32,7 +35,11 @@ def create():
 
     wordpress_config_handler = WordPressConfigHandler(
         project_name, project_directory, configuration_handler)
-    wordpress_config_handler.run()
+    db_filename = wordpress_config_handler.run()
+
+    database_handler = DatabaseHandler(
+        db_filename, file_handler, configuration_handler)
+    database_handler.run()
 
     click.echo('-' * 50)
     click.secho('Tudo pronto', fg="green")
