@@ -31,7 +31,7 @@ def create():
     dependencies_handler.run()
 
     wordpress_config_handler = WordPressConfigHandler(
-        project_name, project_directory)
+        project_name, project_directory, configuration_handler)
     wordpress_config_handler.run()
 
     click.echo('-' * 50)

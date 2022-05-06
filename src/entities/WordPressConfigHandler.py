@@ -6,11 +6,11 @@ from src.entities.ConfigurationHandler import ConfigurationHandler
 
 
 class WordPressConfigHandler:
-    def __init__(self, project_name, project_directory) -> None:
+    def __init__(self, project_name, project_directory, configuration_handler) -> None:
         self.project_directory = project_directory
         self.project_name = project_name
         self.file_handler = FileHandler()
-        self.configuration_handler = ConfigurationHandler()
+        self.configuration_handler = configuration_handler
         self.db_name, self.db_prefix, self.domain, self.db_user, self.db_password = self.get_config_data()
 
     def create_base_file(self):
