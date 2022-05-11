@@ -2,6 +2,8 @@ from logging import config
 import os
 from re import S
 
+import click
+
 
 class HostsHandler:
     def __init__(self, project_name, configuration_handler):
@@ -26,4 +28,6 @@ class HostsHandler:
                 new_host.write(line)
 
     def run(self):
+        click.secho('Modificando o arquivo de hosts', fg="bright_blue")
         self.__verify_host()
+        click.secho('Arquivo de hosts atualizado', fg="green")
