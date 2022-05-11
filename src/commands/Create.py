@@ -9,6 +9,7 @@ from src.entities.DatabaseHandler import DatabaseHandler
 
 from src.entities.GitHandler import GitHandler
 from src.entities.DependenciesHandler import DependenciesHandler
+from src.entities.HostsHandler import HostsHandler
 from src.entities.SetupChecker import SetupChecker
 from src.entities.WordPressConfigHandler import WordPressConfigHandler
 from src.entities.ConfigurationHandler import ConfigurationHandler
@@ -40,6 +41,9 @@ def create():
     database_handler = DatabaseHandler(
         db_filename, file_handler, configuration_handler)
     database_handler.run()
+
+    hosts_handler = HostsHandler(project_name, configuration_handler)
+    hosts_handler.run()
 
     click.echo('-' * 50)
     click.secho('Tudo pronto', fg="green")

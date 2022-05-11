@@ -19,6 +19,7 @@ class ConfigurationHandler(FileHandler):
         self.__database_user = None
         self.__projects_root = None
         self.__database_password = ''
+        self.__hosts_path = ''
 
     def __promptOptions(self):
         # Roots
@@ -30,6 +31,10 @@ class ConfigurationHandler(FileHandler):
 
         self.__database_files_root = self.prompt_handler.create_text_prompt(
             'Diretório dos arquivos de dump do MySQL (caminho completo)', self.argument_checker.verify_directory)
+
+        self.__hosts_path = self.prompt_handler.create_text_prompt(
+            'Diretório do arquivo de hosts (caminho completo)', self.argument_checker.verify_directory
+        )
 
         # Credentials
         self.__database_user = self.prompt_handler.create_text_prompt(
@@ -54,6 +59,7 @@ class ConfigurationHandler(FileHandler):
                 'devilbox_root': self.__devilbox_root,
                 'projects_root': self.__projects_root,
                 'database_files_root': self.__database_files_root,
+                'hosts_root': self.__hosts_path,
             },
             'credentials': {
                 'database_user': self.__database_user,

@@ -24,7 +24,7 @@ class DependenciesHandler():
     def run(self):
         files_exists = self.check_files_exists()
 
-        if(files_exists):
+        if files_exists:
             click.secho('Instalando as dependencias do composer',
                         fg="bright_blue")
             self.composer_install()
@@ -32,5 +32,4 @@ class DependenciesHandler():
             sleep(2)
             click.clear()
         else:
-            print("N ta caindo no if")
-            sleep(4)
+            raise click.BadParameter('Arquivo do composer não foi encontrado')
