@@ -11,6 +11,7 @@ from src.entities.GitHandler import GitHandler
 from src.entities.DependenciesHandler import DependenciesHandler
 from src.entities.HostsHandler import HostsHandler
 from src.entities.SetupChecker import SetupChecker
+from src.entities.ThemeHandler import ThemeHandler
 from src.entities.WordPressConfigHandler import WordPressConfigHandler
 from src.entities.ConfigurationHandler import ConfigurationHandler
 
@@ -44,6 +45,10 @@ def create():
 
     hosts_handler = HostsHandler(project_name, configuration_handler)
     hosts_handler.run()
+
+    theme_handler = ThemeHandler(
+        project_directory, prompt_handler, dependencies_handler)
+    theme_handler.run()
 
     click.echo('-' * 50)
     click.secho('Tudo pronto', fg="green")

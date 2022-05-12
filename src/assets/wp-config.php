@@ -9,7 +9,7 @@ define('DB_NAME', _DATABASE);
 define('DB_USER', '<dbuser>');
 define('DB_PASSWORD', '<dbpassword>');
 define('DB_HOST', '127.0.0.1');
-define('DB_CHARSET', 'utf8');
+define('DB_CHARSET', 'utf8mb4');
 define('DB_COLLATE', '');
 
 // https://api.wordpress.org/secret-key/1.1/salt

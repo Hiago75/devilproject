@@ -17,9 +17,13 @@ class DependenciesHandler():
 
         return composer_json_exists and composer_lock_exists
 
-    def composer_install(self):
-        os.chdir(self.project_directory)
+    def composer_install(self, project_directory):
+        os.chdir(project_directory)
         os.system('composer install')
+
+    def yarn_install(self, folder_dir):
+        os.chdir(folder_dir)
+        os.system('yarn install')
 
     def run(self):
         files_exists = self.check_files_exists()
@@ -27,7 +31,7 @@ class DependenciesHandler():
         if files_exists:
             click.secho('Instalando as dependencias do composer',
                         fg="bright_blue")
-            self.composer_install()
+            self.composer_install(self.project_directory)
             click.secho('Dependencias instaladas', fg='green')
             sleep(2)
             click.clear()
