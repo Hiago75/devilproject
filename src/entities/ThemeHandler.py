@@ -3,11 +3,11 @@ import click
 
 
 class ThemeHandler():
-    def __init__(self, project_directory, prompt_handler, dependencies_handler):
+    def __init__(self, project_directory, prompt_handler, dependencies_handler, file_handler):
         self.__prompt_handler = prompt_handler
         self.__dependencies_handler = dependencies_handler
+        self.__file_handler = file_handler
 
-        self.__project_directory = project_directory,
         self.__themes_directory = os.path.join(
             project_directory, 'wp-content', 'themes')
 
@@ -42,18 +42,26 @@ class ThemeHandler():
 
     def __build_theme(self, theme_directory):
         self.__dependencies_handler.yarn_install(theme_directory)
-        self.__dependencies_handler.composer_install(theme_directory)
+
+        uses_composer = self.__file_handler.check_file_exists(
+            os.path.join(theme_directory, 'composer.json'))
+
+        if uses_composer:
+            self.__dependencies_handler.composer_install(theme_directory)
+
         self.__yarn_build(theme_directory)
 
     def run(self):
         click.clear()
         self.__get_theme_info()
 
-        click.secho('Pegando o(s) diretório(s) do(s) tema(s)', fg='bright_blue')
+        click.secho('Pegando o(s) diretório(s) do(s) tema(s)',
+                    fg='bright_blue')
         self.__get_themes_path()
         click.secho('Diretório(s) pego(s)', fg="green")
-        
-        click.secho('Instalando dependencias e buildando o(s) tema(s)', fg="bright_blue")
+
+        click.secho(
+            'Instalando dependencias e buildando o(s) tema(s)', fg="bright_blue")
         if self.__is_child:
             self.__build_theme(self.__parent_theme_dir)
 

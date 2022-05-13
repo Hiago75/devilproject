@@ -39,6 +39,11 @@ class FileHandler:
 
         return filepath
 
+    def check_file_exists(self, filepath):
+        file_exists = os.path.exists(filepath)
+
+        return file_exists
+
     def replace_statments(self, original_file_dir, new_file_dir, statments):
         original_file = open(original_file_dir, 'rt')
         new_config = open(new_file_dir, 'wt')
